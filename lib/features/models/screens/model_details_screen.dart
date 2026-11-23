@@ -38,16 +38,20 @@ class ModelDetailsScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(model.description ?? 'No description'),
           const SizedBox(height: 12),
-          _row('Provider', model.provider ?? '-'),
-          _row('Context length', '${model.contextLength ?? '-'}'),
-          _row('Prompt price', '${model.promptPrice ?? 0}'),
-          _row('Completion price', '${model.completionPrice ?? 0}'),
-          _row('Free', model.isFree ? 'Yes' : 'No'),
-          _row('Input modalities', model.inputModalities.join(', ')),
-          _row('Output modalities', model.outputModalities.join(', ')),
-          _row('Supported params', model.supportedParameters.join(', ')),
-          _row('Endpoints', model.endpoints.join(', ')),
-          _row('Categories', model.categories.join(', ')),
+          _row(context, 'Provider', model.provider ?? '-'),
+          _row(context, 'Context length', '${model.contextLength ?? '-'}'),
+          _row(context, 'Prompt price', '${model.promptPrice ?? 0}'),
+          _row(context, 'Completion price', '${model.completionPrice ?? 0}'),
+          _row(context, 'Free', model.isFree ? 'Yes' : 'No'),
+          _row(context, 'Input modalities', model.inputModalities.join(', ')),
+          _row(context, 'Output modalities', model.outputModalities.join(', ')),
+          _row(
+            context,
+            'Supported params',
+            model.supportedParameters.join(', '),
+          ),
+          _row(context, 'Endpoints', model.endpoints.join(', ')),
+          _row(context, 'Categories', model.categories.join(', ')),
           const SizedBox(height: 16),
           Wrap(
             spacing: 8,
@@ -74,22 +78,33 @@ class ModelDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _row(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 160,
-            child: Text(
-              label,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(child: Text(value)),
-        ],
-      ),
+  Widget _row(BuildContext context, String label, String value) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 440;
+        final labelStyle = Theme.of(context).textTheme.labelLarge
+            ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant);
+        final valueStyle = Theme.of(context).textTheme.bodyMedium;
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: isCompact
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(label, style: labelStyle),
+                    const SizedBox(height: 4),
+                    Text(value, style: valueStyle),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 180, child: Text(label, style: labelStyle)),
+                    Expanded(child: Text(value, style: valueStyle)),
+                  ],
+                ),
+        );
+      },
     );
   }
 }

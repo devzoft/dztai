@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/models_provider.dart';
 import '../../chat/providers/chat_providers.dart';
+import '../../settings/providers/model_cost_filter_provider.dart';
+import '../../../models/model_cost_filter.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -15,12 +17,12 @@ class ModelsScreen extends ConsumerStatefulWidget {
 class _ModelsScreenState extends ConsumerState<ModelsScreen> {
   String _query = '';
   String _category = 'All';
-  bool _freeOnly = false;
 
   @override
   Widget build(BuildContext context) {
     final asyncModels = ref.watch(modelsProvider);
     final favorites = ref.watch(favoritesProvider);
+    final costFilter = ref.watch(modelCostFilterProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +39,7 @@ class _ModelsScreenState extends ConsumerState<ModelsScreen> {
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (models) {
           final filtered = models.where((m) {
-            if (_freeOnly && !m.isFree) {
+            if (!costFilter.includes(m.isFree)) {
               return false;
             }
             if (_category != 'All' && !m.categories.contains(_category)) {
@@ -55,28 +57,63 @@ class _ModelsScreenState extends ConsumerState<ModelsScreen> {
 
           return Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: 'Search models/providers',
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isCompact = constraints.maxWidth < 430;
+                  final search = TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Search models or providers',
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                    onChanged: (v) => setState(() => _query = v),
+                  );
+                  final costFilterMenu = PopupMenuButton<ModelCostFilter>(
+                    tooltip: 'Filter models by price',
+                    onSelected: (value) => ref
+                        .read(modelCostFilterProvider.notifier)
+                        .setFilter(value),
+                    itemBuilder: (context) => [
+                      for (final filter in ModelCostFilter.values)
+                        PopupMenuItem(
+                          value: filter,
+                          child: Text(switch (filter) {
+                            ModelCostFilter.all => 'All models',
+                            ModelCostFilter.free => 'Free models',
+                            ModelCostFilter.paid => 'Paid models',
+                          }),
                         ),
-                        onChanged: (v) => setState(() => _query = v),
-                      ),
+                    ],
+                    child: Chip(
+                      avatar: const Icon(Icons.tune_rounded, size: 17),
+                      label: Text(switch (costFilter) {
+                        ModelCostFilter.all => 'All',
+                        ModelCostFilter.free => 'Free',
+                        ModelCostFilter.paid => 'Paid',
+                      }),
                     ),
-                    const SizedBox(width: 8),
-                    FilterChip(
-                      label: const Text('Free'),
-                      selected: _freeOnly,
-                      onSelected: (v) => setState(() => _freeOnly = v),
-                    ),
-                  ],
-                ),
+                  );
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                    child: isCompact
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              search,
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: costFilterMenu,
+                              ),
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              Expanded(child: search),
+                              const SizedBox(width: 12),
+                              costFilterMenu,
+                            ],
+                          ),
+                  );
+                },
               ),
               SizedBox(
                 height: 40,
@@ -111,24 +148,72 @@ class _ModelsScreenState extends ConsumerState<ModelsScreen> {
                   itemBuilder: (context, i) {
                     final m = filtered[i];
                     final fav = favorites.contains(m.id);
-                    return ListTile(
-                      title: Text(m.name),
-                      subtitle: Text(
-                        '${m.provider ?? ''} • ctx ${m.contextLength ?? '?'} • ${m.isFree ? 'Free' : 'Paid'}',
+                    final provider = m.provider ?? m.name;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 5,
                       ),
-                      trailing: IconButton(
-                        icon: Icon(fav ? Icons.star : Icons.star_border),
-                        onPressed: () =>
-                            ref.read(favoritesProvider.notifier).toggle(m.id),
+                      child: Card(
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 4,
+                          ),
+                          leading: CircleAvatar(
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.12),
+                            child: Text(
+                              provider.isEmpty
+                                  ? 'M'
+                                  : provider.substring(0, 1).toUpperCase(),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            m.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          subtitle: Text(
+                            '${m.provider ?? ''} · ${m.contextLength ?? '?'} context · ${m.isFree ? 'Free' : 'Paid'}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: IconButton(
+                            tooltip: fav ? 'Remove favorite' : 'Add favorite',
+                            icon: Icon(
+                              fav
+                                  ? Icons.star_rounded
+                                  : Icons.star_outline_rounded,
+                              color: fav
+                                  ? Colors.amber
+                                  : Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                            ),
+                            onPressed: () => ref
+                                .read(favoritesProvider.notifier)
+                                .toggle(m.id),
+                          ),
+                          onTap: () => context.push(
+                            '/model/${Uri.encodeComponent(m.id)}',
+                          ),
+                          onLongPress: () {
+                            ref.read(selectedModelIdProvider.notifier).state =
+                                m.id;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Selected ${m.name}')),
+                            );
+                          },
+                        ),
                       ),
-                      onTap: () =>
-                          context.push('/model/${Uri.encodeComponent(m.id)}'),
-                      onLongPress: () {
-                        ref.read(selectedModelIdProvider.notifier).state = m.id;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Selected ${m.name}')),
-                        );
-                      },
                     );
                   },
                 ),

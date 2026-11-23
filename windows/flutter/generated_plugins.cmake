@@ -3,6 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  audioplayers_windows
+  file_saver
   flutter_secure_storage_windows
   sqlite3_flutter_libs
 )

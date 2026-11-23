@@ -9,6 +9,7 @@ class StorageService {
   static const _modelsUpdatedKey = 'models_updated_at';
   static const _themeKey = 'theme_mode';
   static const _defaultModelKey = 'default_model';
+  static const _modelCostFilterKey = 'model_cost_filter';
 
   Future<SharedPreferences> get _prefs async => SharedPreferences.getInstance();
 
@@ -60,6 +61,16 @@ class StorageService {
   Future<String?> getDefaultModel() async {
     final prefs = await _prefs;
     return prefs.getString(_defaultModelKey);
+  }
+
+  Future<void> setModelCostFilter(String filter) async {
+    final prefs = await _prefs;
+    await prefs.setString(_modelCostFilterKey, filter);
+  }
+
+  Future<String?> getModelCostFilter() async {
+    final prefs = await _prefs;
+    return prefs.getString(_modelCostFilterKey);
   }
 
   Future<Set<String>> getFavorites() async {

@@ -1,4 +1,4 @@
-name: devzoft_ai
+name: dztwai
 description: "DevZoft AI multi-model assistant powered by OpenRouter."
 publish_to: 'none'
 version: 1.0.0+1
@@ -23,6 +23,12 @@ dependencies:
   shared_preferences: ^2.5.3
   cupertino_icons: ^1.0.8
   material_ui: ^1.11.1
+  gpt_markdown: ^1.4.1
+  audioplayers: ^6.8.1
+  video_player: ^2.14.1
+  flutter_svg: ^2.5.0
+  web: ^1.1.2
+  file_saver: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -30,6 +36,29 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   drift_dev: ^2.26.0
   build_runner: ^2.4.15
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/brand/app_icon.png
+  remove_alpha_ios: true
+  background_color_ios: "#071637"
+  adaptive_icon_background: "#071637"
+  adaptive_icon_foreground: assets/brand/app_icon.png
+  adaptive_icon_foreground_inset: 0
+  web:
+    generate: true
+    image_path: assets/brand/app_icon.png
+    background_color: "#071637"
+    theme_color: "#071637"
+  windows:
+    generate: true
+    image_path: assets/brand/app_icon.png
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: assets/brand/app_icon.png

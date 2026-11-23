@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/providers/app_providers.dart';
 import '../../../models/ai_model.dart';
+import '../../settings/providers/model_cost_filter_provider.dart';
 
 final modelsProvider = FutureProvider<List<AiModel>>((ref) async {
   final storage = ref.read(storageServiceProvider);
@@ -15,6 +16,14 @@ final modelsProvider = FutureProvider<List<AiModel>>((ref) async {
   } catch (_) {
     return cached;
   }
+});
+
+final filteredModelsProvider = Provider<List<AiModel>>((ref) {
+  final models = ref.watch(modelsProvider).valueOrNull ?? const <AiModel>[];
+  final filter = ref.watch(modelCostFilterProvider);
+  return models
+      .where((model) => filter.includes(model.isFree))
+      .toList(growable: false);
 });
 
 final favoritesProvider = StateNotifierProvider<FavoritesNotifier, Set<String>>(

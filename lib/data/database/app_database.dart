@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+
 import 'app_database_connection.dart';
 
 part 'app_database.g.dart';
@@ -29,12 +30,35 @@ class Messages extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [Conversations, Messages])
+@DataClassName('GeneratedMediaRow')
+class GeneratedMedia extends Table {
+  TextColumn get id => text()();
+  TextColumn get messageId =>
+      text().references(Messages, #id, onDelete: KeyAction.cascade)();
+  TextColumn get kind => text()();
+  TextColumn get mimeType => text()();
+  TextColumn get modelId => text()();
+  BlobColumn get bytes => blob()();
+  IntColumn get createdAt => integer()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [Conversations, Messages, GeneratedMedia])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.createTable(generatedMedia);
+    },
+  );
 }
 
 LazyDatabase _openConnection() {

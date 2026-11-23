@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/api_key_provider.dart';
+import '../providers/model_cost_filter_provider.dart';
 import '../providers/theme_provider.dart';
 import '../../chat/providers/chat_providers.dart';
 import '../../models/providers/models_provider.dart';
 import '../../../shared/providers/app_providers.dart';
+import '../../../models/model_cost_filter.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -27,8 +29,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final keyState = ref.watch(apiKeyControllerProvider);
     final themeMode = ref.watch(themeModeProvider);
-    final models = ref.watch(modelsProvider).valueOrNull ?? [];
+    final models = ref.watch(filteredModelsProvider);
+    final modelCostFilter = ref.watch(modelCostFilterProvider);
     final selectedId = ref.watch(selectedModelIdProvider);
+    final visibleSelectedId = selectedId == null
+        ? null
+        : models.any((model) => model.id == selectedId)
+        ? selectedId
+        : models.isEmpty
+        ? null
+        : models.first.id;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -100,10 +110,32 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ref.read(themeModeProvider.notifier).setMode(s.first),
           ),
           const Divider(height: 32),
+          Text(
+            'Model pricing filter',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Choose which models are available for chat, media generation, and discovery.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 10),
+          SegmentedButton<ModelCostFilter>(
+            segments: const [
+              ButtonSegment(value: ModelCostFilter.all, label: Text('All')),
+              ButtonSegment(value: ModelCostFilter.free, label: Text('Free')),
+              ButtonSegment(value: ModelCostFilter.paid, label: Text('Paid')),
+            ],
+            selected: {modelCostFilter},
+            onSelectionChanged: (selection) => ref
+                .read(modelCostFilterProvider.notifier)
+                .setFilter(selection.first),
+          ),
+          const Divider(height: 32),
           Text('Default model', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           DropdownButton<String>(
-            value: selectedId,
+            value: visibleSelectedId,
             hint: const Text('Select default model'),
             items: models
                 .map((m) => DropdownMenuItem(value: m.id, child: Text(m.name)))

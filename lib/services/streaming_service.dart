@@ -4,17 +4,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../core/constants/api_constants.dart';
+import 'openrouter_headers.dart';
 
 class StreamingService {
   final http.Client _client = http.Client();
-
-  Map<String, String> _headers(String key) => {
-    'Authorization': 'Bearer $key',
-    'Content-Type': 'application/json',
-    'HTTP-Referer': 'https://devzoft.ai',
-    'X-Title': 'DevZoft AI',
-    'Accept': 'text/event-stream',
-  };
 
   Stream<String> streamChatCompletions({
     required String key,
@@ -26,7 +19,7 @@ class StreamingService {
       'POST',
       Uri.parse('${ApiConstants.baseUrl}${ApiConstants.chatCompletions}'),
     );
-    req.headers.addAll(_headers(key));
+    req.headers.addAll(openRouterHeaders(key, accept: 'text/event-stream'));
     req.body = jsonEncode({
       'model': model,
       'messages': messages,
@@ -68,7 +61,7 @@ class StreamingService {
       'POST',
       Uri.parse('${ApiConstants.baseUrl}${ApiConstants.responses}'),
     );
-    req.headers.addAll(_headers(key));
+    req.headers.addAll(openRouterHeaders(key, accept: 'text/event-stream'));
     req.body = jsonEncode({'model': model, 'input': input, 'stream': true});
 
     final res = await _client.send(req);

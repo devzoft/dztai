@@ -18,22 +18,31 @@ class ApiKeyController extends StateNotifier<AsyncValue<String?>> {
   final Ref ref;
 
   Future<void> _load() async {
-    final key = await ref.read(secureKeyServiceProvider).getKey();
-    state = AsyncValue.data(key);
+    try {
+      final key = await ref.read(secureKeyServiceProvider).getKey();
+      state = AsyncValue.data(key);
+    } on Exception catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
   }
 
   Future<bool> save(String key) async {
+    final secureStorage = ref.read(secureKeyServiceProvider);
+    final storedKey = await secureStorage.getKey();
     state = const AsyncValue.loading();
-    final valid = await ref.read(openRouterServiceProvider).verifyKey(key);
-    if (!valid) {
-      state = AsyncValue.data(
-        await ref.read(secureKeyServiceProvider).getKey(),
-      );
-      return false;
+    try {
+      final valid = await ref.read(openRouterServiceProvider).verifyKey(key);
+      if (!valid) {
+        state = AsyncValue.data(storedKey);
+        return false;
+      }
+      await secureStorage.saveKey(key);
+      state = AsyncValue.data(key);
+      return true;
+    } on Exception catch (error, stackTrace) {
+      state = AsyncValue.data(storedKey);
+      Error.throwWithStackTrace(error, stackTrace);
     }
-    await ref.read(secureKeyServiceProvider).saveKey(key);
-    state = AsyncValue.data(key);
-    return true;
   }
 
   Future<void> delete() async {

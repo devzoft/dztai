@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../database/app_database.dart';
 import '../../models/conversation.dart';
 import '../../models/chat_message.dart';
+import '../../models/generated_media.dart';
 
 class ConversationRepository {
   final AppDatabase _db;
@@ -60,6 +61,49 @@ class ConversationRepository {
     )..where((t) => t.conversationId.equals(conversationId))).get();
     rows.sort((a, b) => a.createdAt.compareTo(b.createdAt));
     return rows.map(_toMessage).toList();
+  }
+
+  Future<Map<String, List<GeneratedMediaAsset>>> getGeneratedMedia(
+    String conversationId,
+  ) async {
+    final query = _db.select(_db.generatedMedia).join([
+      innerJoin(
+        _db.messages,
+        _db.messages.id.equalsExp(_db.generatedMedia.messageId),
+      ),
+    ])..where(_db.messages.conversationId.equals(conversationId));
+    final rows = await query.get();
+    final assets = <String, List<GeneratedMediaAsset>>{};
+    for (final row in rows) {
+      final media = row.readTable(_db.generatedMedia);
+      final asset = GeneratedMediaAsset(
+        id: media.id,
+        messageId: media.messageId,
+        kind: GeneratedMediaKind.values.byName(media.kind),
+        mimeType: media.mimeType,
+        modelId: media.modelId,
+        bytes: media.bytes,
+        createdAt: DateTime.fromMillisecondsSinceEpoch(media.createdAt),
+      );
+      assets.putIfAbsent(media.messageId, () => []).add(asset);
+    }
+    return assets;
+  }
+
+  Future<void> addGeneratedMedia(GeneratedMediaAsset media) async {
+    await _db
+        .into(_db.generatedMedia)
+        .insert(
+          GeneratedMediaCompanion.insert(
+            id: media.id,
+            messageId: media.messageId,
+            kind: media.kind.name,
+            mimeType: media.mimeType,
+            modelId: media.modelId,
+            bytes: media.bytes,
+            createdAt: media.createdAt.millisecondsSinceEpoch,
+          ),
+        );
   }
 
   Future<void> addMessage(ChatMessage message) async {

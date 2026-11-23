@@ -826,16 +826,495 @@ class MessagesCompanion extends UpdateCompanion<MessageRow> {
   }
 }
 
+class $GeneratedMediaTable extends GeneratedMedia
+    with TableInfo<$GeneratedMediaTable, GeneratedMediaRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GeneratedMediaTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _messageIdMeta = const VerificationMeta(
+    'messageId',
+  );
+  @override
+  late final GeneratedColumn<String> messageId = GeneratedColumn<String>(
+    'message_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES messages (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _mimeTypeMeta = const VerificationMeta(
+    'mimeType',
+  );
+  @override
+  late final GeneratedColumn<String> mimeType = GeneratedColumn<String>(
+    'mime_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modelIdMeta = const VerificationMeta(
+    'modelId',
+  );
+  @override
+  late final GeneratedColumn<String> modelId = GeneratedColumn<String>(
+    'model_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bytesMeta = const VerificationMeta('bytes');
+  @override
+  late final GeneratedColumn<Uint8List> bytes = GeneratedColumn<Uint8List>(
+    'bytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.blob,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    messageId,
+    kind,
+    mimeType,
+    modelId,
+    bytes,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'generated_media';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<GeneratedMediaRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('message_id')) {
+      context.handle(
+        _messageIdMeta,
+        messageId.isAcceptableOrUnknown(data['message_id']!, _messageIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_messageIdMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('mime_type')) {
+      context.handle(
+        _mimeTypeMeta,
+        mimeType.isAcceptableOrUnknown(data['mime_type']!, _mimeTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mimeTypeMeta);
+    }
+    if (data.containsKey('model_id')) {
+      context.handle(
+        _modelIdMeta,
+        modelId.isAcceptableOrUnknown(data['model_id']!, _modelIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modelIdMeta);
+    }
+    if (data.containsKey('bytes')) {
+      context.handle(
+        _bytesMeta,
+        bytes.isAcceptableOrUnknown(data['bytes']!, _bytesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bytesMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  GeneratedMediaRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return GeneratedMediaRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      messageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}message_id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      mimeType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mime_type'],
+      )!,
+      modelId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}model_id'],
+      )!,
+      bytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}bytes'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $GeneratedMediaTable createAlias(String alias) {
+    return $GeneratedMediaTable(attachedDatabase, alias);
+  }
+}
+
+class GeneratedMediaRow extends DataClass
+    implements Insertable<GeneratedMediaRow> {
+  final String id;
+  final String messageId;
+  final String kind;
+  final String mimeType;
+  final String modelId;
+  final Uint8List bytes;
+  final int createdAt;
+  const GeneratedMediaRow({
+    required this.id,
+    required this.messageId,
+    required this.kind,
+    required this.mimeType,
+    required this.modelId,
+    required this.bytes,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['message_id'] = Variable<String>(messageId);
+    map['kind'] = Variable<String>(kind);
+    map['mime_type'] = Variable<String>(mimeType);
+    map['model_id'] = Variable<String>(modelId);
+    map['bytes'] = Variable<Uint8List>(bytes);
+    map['created_at'] = Variable<int>(createdAt);
+    return map;
+  }
+
+  GeneratedMediaCompanion toCompanion(bool nullToAbsent) {
+    return GeneratedMediaCompanion(
+      id: Value(id),
+      messageId: Value(messageId),
+      kind: Value(kind),
+      mimeType: Value(mimeType),
+      modelId: Value(modelId),
+      bytes: Value(bytes),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory GeneratedMediaRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return GeneratedMediaRow(
+      id: serializer.fromJson<String>(json['id']),
+      messageId: serializer.fromJson<String>(json['messageId']),
+      kind: serializer.fromJson<String>(json['kind']),
+      mimeType: serializer.fromJson<String>(json['mimeType']),
+      modelId: serializer.fromJson<String>(json['modelId']),
+      bytes: serializer.fromJson<Uint8List>(json['bytes']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'messageId': serializer.toJson<String>(messageId),
+      'kind': serializer.toJson<String>(kind),
+      'mimeType': serializer.toJson<String>(mimeType),
+      'modelId': serializer.toJson<String>(modelId),
+      'bytes': serializer.toJson<Uint8List>(bytes),
+      'createdAt': serializer.toJson<int>(createdAt),
+    };
+  }
+
+  GeneratedMediaRow copyWith({
+    String? id,
+    String? messageId,
+    String? kind,
+    String? mimeType,
+    String? modelId,
+    Uint8List? bytes,
+    int? createdAt,
+  }) => GeneratedMediaRow(
+    id: id ?? this.id,
+    messageId: messageId ?? this.messageId,
+    kind: kind ?? this.kind,
+    mimeType: mimeType ?? this.mimeType,
+    modelId: modelId ?? this.modelId,
+    bytes: bytes ?? this.bytes,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  GeneratedMediaRow copyWithCompanion(GeneratedMediaCompanion data) {
+    return GeneratedMediaRow(
+      id: data.id.present ? data.id.value : this.id,
+      messageId: data.messageId.present ? data.messageId.value : this.messageId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      mimeType: data.mimeType.present ? data.mimeType.value : this.mimeType,
+      modelId: data.modelId.present ? data.modelId.value : this.modelId,
+      bytes: data.bytes.present ? data.bytes.value : this.bytes,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GeneratedMediaRow(')
+          ..write('id: $id, ')
+          ..write('messageId: $messageId, ')
+          ..write('kind: $kind, ')
+          ..write('mimeType: $mimeType, ')
+          ..write('modelId: $modelId, ')
+          ..write('bytes: $bytes, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    messageId,
+    kind,
+    mimeType,
+    modelId,
+    $driftBlobEquality.hash(bytes),
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is GeneratedMediaRow &&
+          other.id == this.id &&
+          other.messageId == this.messageId &&
+          other.kind == this.kind &&
+          other.mimeType == this.mimeType &&
+          other.modelId == this.modelId &&
+          $driftBlobEquality.equals(other.bytes, this.bytes) &&
+          other.createdAt == this.createdAt);
+}
+
+class GeneratedMediaCompanion extends UpdateCompanion<GeneratedMediaRow> {
+  final Value<String> id;
+  final Value<String> messageId;
+  final Value<String> kind;
+  final Value<String> mimeType;
+  final Value<String> modelId;
+  final Value<Uint8List> bytes;
+  final Value<int> createdAt;
+  final Value<int> rowid;
+  const GeneratedMediaCompanion({
+    this.id = const Value.absent(),
+    this.messageId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.mimeType = const Value.absent(),
+    this.modelId = const Value.absent(),
+    this.bytes = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  GeneratedMediaCompanion.insert({
+    required String id,
+    required String messageId,
+    required String kind,
+    required String mimeType,
+    required String modelId,
+    required Uint8List bytes,
+    required int createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       messageId = Value(messageId),
+       kind = Value(kind),
+       mimeType = Value(mimeType),
+       modelId = Value(modelId),
+       bytes = Value(bytes),
+       createdAt = Value(createdAt);
+  static Insertable<GeneratedMediaRow> custom({
+    Expression<String>? id,
+    Expression<String>? messageId,
+    Expression<String>? kind,
+    Expression<String>? mimeType,
+    Expression<String>? modelId,
+    Expression<Uint8List>? bytes,
+    Expression<int>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (messageId != null) 'message_id': messageId,
+      if (kind != null) 'kind': kind,
+      if (mimeType != null) 'mime_type': mimeType,
+      if (modelId != null) 'model_id': modelId,
+      if (bytes != null) 'bytes': bytes,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  GeneratedMediaCompanion copyWith({
+    Value<String>? id,
+    Value<String>? messageId,
+    Value<String>? kind,
+    Value<String>? mimeType,
+    Value<String>? modelId,
+    Value<Uint8List>? bytes,
+    Value<int>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return GeneratedMediaCompanion(
+      id: id ?? this.id,
+      messageId: messageId ?? this.messageId,
+      kind: kind ?? this.kind,
+      mimeType: mimeType ?? this.mimeType,
+      modelId: modelId ?? this.modelId,
+      bytes: bytes ?? this.bytes,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (messageId.present) {
+      map['message_id'] = Variable<String>(messageId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (mimeType.present) {
+      map['mime_type'] = Variable<String>(mimeType.value);
+    }
+    if (modelId.present) {
+      map['model_id'] = Variable<String>(modelId.value);
+    }
+    if (bytes.present) {
+      map['bytes'] = Variable<Uint8List>(bytes.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GeneratedMediaCompanion(')
+          ..write('id: $id, ')
+          ..write('messageId: $messageId, ')
+          ..write('kind: $kind, ')
+          ..write('mimeType: $mimeType, ')
+          ..write('modelId: $modelId, ')
+          ..write('bytes: $bytes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $ConversationsTable conversations = $ConversationsTable(this);
   late final $MessagesTable messages = $MessagesTable(this);
+  late final $GeneratedMediaTable generatedMedia = $GeneratedMediaTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [conversations, messages];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    conversations,
+    messages,
+    generatedMedia,
+  ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'messages',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('generated_media', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$ConversationsTableCreateCompanionBuilder =
@@ -1204,6 +1683,24 @@ final class $$MessagesTableReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<$GeneratedMediaTable, List<GeneratedMediaRow>>
+  _generatedMediaRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.generatedMedia,
+    aliasName: 'messages__id__generated_media__message_id',
+  );
+
+  $$GeneratedMediaTableProcessedTableManager get generatedMediaRefs {
+    final manager = $$GeneratedMediaTableTableManager(
+      $_db,
+      $_db.generatedMedia,
+    ).filter((f) => f.messageId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_generatedMediaRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$MessagesTableFilterComposer
@@ -1261,6 +1758,31 @@ class $$MessagesTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> generatedMediaRefs(
+    Expression<bool> Function($$GeneratedMediaTableFilterComposer f) f,
+  ) {
+    final $$GeneratedMediaTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.generatedMedia,
+      getReferencedColumn: (t) => t.messageId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GeneratedMediaTableFilterComposer(
+            $db: $db,
+            $table: $db.generatedMedia,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -1368,6 +1890,31 @@ class $$MessagesTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> generatedMediaRefs<T extends Object>(
+    Expression<T> Function($$GeneratedMediaTableAnnotationComposer a) f,
+  ) {
+    final $$GeneratedMediaTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.generatedMedia,
+      getReferencedColumn: (t) => t.messageId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GeneratedMediaTableAnnotationComposer(
+            $db: $db,
+            $table: $db.generatedMedia,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$MessagesTableTableManager
@@ -1383,7 +1930,7 @@ class $$MessagesTableTableManager
           $$MessagesTableUpdateCompanionBuilder,
           (MessageRow, $$MessagesTableReferences),
           MessageRow,
-          PrefetchHooks Function({bool conversationId})
+          PrefetchHooks Function({bool conversationId, bool generatedMediaRefs})
         > {
   $$MessagesTableTableManager(_$AppDatabase db, $MessagesTable table)
     : super(
@@ -1440,7 +1987,391 @@ class $$MessagesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({conversationId = false}) {
+          prefetchHooksCallback:
+              ({conversationId = false, generatedMediaRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (generatedMediaRefs) db.generatedMedia,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (conversationId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.conversationId,
+                            referencedTable: $$MessagesTableReferences
+                                ._conversationIdTable(db),
+                            referencedColumn: $$MessagesTableReferences
+                                ._conversationIdTable(db)
+                                .id,
+                          ) as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (generatedMediaRefs)
+                        await $_getPrefetchedDataByColumns<
+                          MessageRow,
+                          $MessagesTable,
+                          GeneratedMediaRow,
+                          $GeneratedMediaTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$MessagesTableReferences
+                              ._generatedMediaRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$MessagesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).generatedMediaRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'message_id',
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$MessagesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MessagesTable,
+      MessageRow,
+      $$MessagesTableFilterComposer,
+      $$MessagesTableOrderingComposer,
+      $$MessagesTableAnnotationComposer,
+      $$MessagesTableCreateCompanionBuilder,
+      $$MessagesTableUpdateCompanionBuilder,
+      (MessageRow, $$MessagesTableReferences),
+      MessageRow,
+      PrefetchHooks Function({bool conversationId, bool generatedMediaRefs})
+    >;
+typedef $$GeneratedMediaTableCreateCompanionBuilder =
+    GeneratedMediaCompanion Function({
+      required String id,
+      required String messageId,
+      required String kind,
+      required String mimeType,
+      required String modelId,
+      required Uint8List bytes,
+      required int createdAt,
+      Value<int> rowid,
+    });
+typedef $$GeneratedMediaTableUpdateCompanionBuilder =
+    GeneratedMediaCompanion Function({
+      Value<String> id,
+      Value<String> messageId,
+      Value<String> kind,
+      Value<String> mimeType,
+      Value<String> modelId,
+      Value<Uint8List> bytes,
+      Value<int> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$GeneratedMediaTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $GeneratedMediaTable, GeneratedMediaRow> {
+  $$GeneratedMediaTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $MessagesTable _messageIdTable(_$AppDatabase db) =>
+      db.messages.createAlias('generated_media__message_id__messages__id');
+
+  $$MessagesTableProcessedTableManager get messageId {
+    final $_column = $_itemColumn<String>('message_id')!;
+
+    final manager = $$MessagesTableTableManager(
+      $_db,
+      $_db.messages,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_messageIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$GeneratedMediaTableFilterComposer
+    extends Composer<_$AppDatabase, $GeneratedMediaTable> {
+  $$GeneratedMediaTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mimeType => $composableBuilder(
+    column: $table.mimeType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get modelId => $composableBuilder(
+    column: $table.modelId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<Uint8List> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$MessagesTableFilterComposer get messageId {
+    final $$MessagesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.messageId,
+      referencedTable: $db.messages,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MessagesTableFilterComposer(
+            $db: $db,
+            $table: $db.messages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$GeneratedMediaTableOrderingComposer
+    extends Composer<_$AppDatabase, $GeneratedMediaTable> {
+  $$GeneratedMediaTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mimeType => $composableBuilder(
+    column: $table.mimeType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get modelId => $composableBuilder(
+    column: $table.modelId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<Uint8List> get bytes => $composableBuilder(
+    column: $table.bytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$MessagesTableOrderingComposer get messageId {
+    final $$MessagesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.messageId,
+      referencedTable: $db.messages,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MessagesTableOrderingComposer(
+            $db: $db,
+            $table: $db.messages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$GeneratedMediaTableAnnotationComposer
+    extends Composer<_$AppDatabase, $GeneratedMediaTable> {
+  $$GeneratedMediaTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get mimeType =>
+      $composableBuilder(column: $table.mimeType, builder: (column) => column);
+
+  GeneratedColumn<String> get modelId =>
+      $composableBuilder(column: $table.modelId, builder: (column) => column);
+
+  GeneratedColumn<Uint8List> get bytes =>
+      $composableBuilder(column: $table.bytes, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$MessagesTableAnnotationComposer get messageId {
+    final $$MessagesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.messageId,
+      referencedTable: $db.messages,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MessagesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.messages,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$GeneratedMediaTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $GeneratedMediaTable,
+          GeneratedMediaRow,
+          $$GeneratedMediaTableFilterComposer,
+          $$GeneratedMediaTableOrderingComposer,
+          $$GeneratedMediaTableAnnotationComposer,
+          $$GeneratedMediaTableCreateCompanionBuilder,
+          $$GeneratedMediaTableUpdateCompanionBuilder,
+          (GeneratedMediaRow, $$GeneratedMediaTableReferences),
+          GeneratedMediaRow,
+          PrefetchHooks Function({bool messageId})
+        > {
+  $$GeneratedMediaTableTableManager(
+    _$AppDatabase db,
+    $GeneratedMediaTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GeneratedMediaTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GeneratedMediaTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GeneratedMediaTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> messageId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> mimeType = const Value.absent(),
+                Value<String> modelId = const Value.absent(),
+                Value<Uint8List> bytes = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GeneratedMediaCompanion(
+                id: id,
+                messageId: messageId,
+                kind: kind,
+                mimeType: mimeType,
+                modelId: modelId,
+                bytes: bytes,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String messageId,
+                required String kind,
+                required String mimeType,
+                required String modelId,
+                required Uint8List bytes,
+                required int createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => GeneratedMediaCompanion.insert(
+                id: id,
+                messageId: messageId,
+                kind: kind,
+                mimeType: mimeType,
+                modelId: modelId,
+                bytes: bytes,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$GeneratedMediaTable, GeneratedMediaRow>(table),
+                  $$GeneratedMediaTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({messageId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -1460,14 +2391,14 @@ class $$MessagesTableTableManager
                       dynamic
                     >
                   >(state) {
-                    if (conversationId) {
+                    if (messageId) {
                       state = state.withJoin(
                         currentTable: table,
-                        currentColumn: table.conversationId,
-                        referencedTable: $$MessagesTableReferences
-                            ._conversationIdTable(db),
-                        referencedColumn: $$MessagesTableReferences
-                            ._conversationIdTable(db)
+                        currentColumn: table.messageId,
+                        referencedTable: $$GeneratedMediaTableReferences
+                            ._messageIdTable(db),
+                        referencedColumn: $$GeneratedMediaTableReferences
+                            ._messageIdTable(db)
                             .id,
                       ) as T;
                     }
@@ -1483,19 +2414,19 @@ class $$MessagesTableTableManager
       );
 }
 
-typedef $$MessagesTableProcessedTableManager =
+typedef $$GeneratedMediaTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $MessagesTable,
-      MessageRow,
-      $$MessagesTableFilterComposer,
-      $$MessagesTableOrderingComposer,
-      $$MessagesTableAnnotationComposer,
-      $$MessagesTableCreateCompanionBuilder,
-      $$MessagesTableUpdateCompanionBuilder,
-      (MessageRow, $$MessagesTableReferences),
-      MessageRow,
-      PrefetchHooks Function({bool conversationId})
+      $GeneratedMediaTable,
+      GeneratedMediaRow,
+      $$GeneratedMediaTableFilterComposer,
+      $$GeneratedMediaTableOrderingComposer,
+      $$GeneratedMediaTableAnnotationComposer,
+      $$GeneratedMediaTableCreateCompanionBuilder,
+      $$GeneratedMediaTableUpdateCompanionBuilder,
+      (GeneratedMediaRow, $$GeneratedMediaTableReferences),
+      GeneratedMediaRow,
+      PrefetchHooks Function({bool messageId})
     >;
 
 class $AppDatabaseManager {
@@ -1505,4 +2436,6 @@ class $AppDatabaseManager {
       $$ConversationsTableTableManager(_db, _db.conversations);
   $$MessagesTableTableManager get messages =>
       $$MessagesTableTableManager(_db, _db.messages);
+  $$GeneratedMediaTableTableManager get generatedMedia =>
+      $$GeneratedMediaTableTableManager(_db, _db.generatedMedia);
 }

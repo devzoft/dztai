@@ -60,7 +60,7 @@ class AiModel {
       outputModalities: output,
       supportedParameters: params,
       endpoints: endpoints,
-      isFree: prompt == 0 && completion == 0,
+      isFree: id.endsWith(':free') || (prompt == 0 && completion == 0),
     );
   }
 
@@ -75,10 +75,12 @@ class AiModel {
     if (outputModalities.contains('image')) {
       cats.add('Image generation');
     }
-    if (inputModalities.contains('audio') || outputModalities.contains('audio')) {
+    if (inputModalities.contains('audio') ||
+        outputModalities.contains('audio')) {
       cats.add('Audio');
     }
-    if (inputModalities.contains('video') || outputModalities.contains('video')) {
+    if (inputModalities.contains('video') ||
+        outputModalities.contains('video')) {
       cats.add('Video');
     }
     if (supportedParameters.contains('tools')) {
